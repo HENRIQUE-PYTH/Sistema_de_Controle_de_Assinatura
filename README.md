@@ -81,7 +81,7 @@ Assinatura 1 —— N Pagamentos
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-=====================================    SISTEMA DE PAGAMENTO SIMPLES EM DESENVOLVIMENTO    ===================================
+============================    SISTEMA DE PAGAMENTO SIMPLES EM DESENVOLVIMENTO    ============================
 
 💳 Pagamento (estrutura preparada)
 
