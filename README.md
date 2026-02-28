@@ -10,7 +10,7 @@ Sistema backend para gerenciamento de assinaturas, permitindo:
 - Renovação, cancelamento e reativação
 - Histórico de assinaturas
 - Estrutura preparada para integração com pagamentos
-- 
+  
 O sistema simula o funcionamento de plataformas de assinatura como Netflix e Spotify, focando principalmente na regra de negócio e no ciclo de cobrança.
 
 (NO MOMENTO TENHO AS ENTIDADES DE PLANO, USUARIO E ASSINATURA ESTÃO FEITAS, O MESMO CABE A SERVICE DAS 3 JÁ FEITAS, FALTA AS CONTROLLERS MAS AINDA NÃO VOU FAZER, POIS VOU CRIAR UMA NOVA ENTIDADE, SERVICE E CONTROLLER QUE SERIA DO PAGAMENTO. PELO FATO DO PROJETO NÃO TA 100%, ESSE É O MOTIVO DO POR QUE AINDA NÃO SUBI AQUI NO GITHUB, QUANDO TIVER TUDO FEITO, ATUALIZO O README DESSE REPOSITORIO E JA LANÇO TUDO AQUI)
