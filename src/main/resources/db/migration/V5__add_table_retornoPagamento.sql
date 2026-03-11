@@ -1,0 +1,1 @@
+ALTER TABLE pagamentos ADD COLUMN retorno_pagamento VARCHAR(50)
