@@ -13,20 +13,20 @@ Sistema backend para gerenciamento de assinaturas, permitindo:
   
 O sistema simula o funcionamento de plataformas de assinatura como Netflix e Spotify, focando principalmente na regra de negócio e no ciclo de cobrança.
 
-(NO MOMENTO TENHO AS ENTIDADES DE PLANO, USUARIO E ASSINATURA ESTÃO FEITAS, O MESMO CABE A SERVICE DAS 3 JÁ FEITAS, FALTA AS CONTROLLERS MAS AINDA NÃO VOU FAZER, POIS VOU CRIAR UMA NOVA ENTIDADE, SERVICE E CONTROLLER QUE SERIA DO PAGAMENTO. PELO FATO DO PROJETO NÃO TA 100%, ESSE É O MOTIVO DO POR QUE AINDA NÃO SUBI AQUI NO GITHUB, QUANDO TIVER TUDO FEITO, ATUALIZO O README DESSE REPOSITORIO E JA LANÇO TUDO AQUI)
-
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 🏗️ Arquitetura
 
 O projeto segue arquitetura em camadas:
 
+- ConfigScheduler (Cobrança automática)
 - Controller
-- Service
-- Repository
-- Entity
 - DTOs
-- Exception Handler
+- Entity
+- Exceptions
+- Mappers
+- Repository
+- Service
 
 Separação clara de responsabilidades e regras de negócio concentradas na camada de Service.
 
@@ -72,6 +72,7 @@ Plano 1 —— N Assinaturas
 - statusAssinatura (StatusAssinatura)
 - usuario (Usuario)
 - plano (Plano)
+- pagamentos (Pagamento)
 
 Relacionamentos:
 
@@ -89,7 +90,8 @@ Assinatura 1 —— N Pagamentos
 - assinatura (Assinatura)
 - valor (BigDecimal)
 - dataPagamento (LocalDate)
-- statusPagamento (Pagamento)
+- metodoPagamento (Enum {CARTAO, PIX, BOLETO})
+- retornoPagamento (Enum {APROVADO, SUSPENSA, PENDENTE, BLOQUEADO, RECUSADO})
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -100,7 +102,7 @@ Enum StatusAssinatura:
 - ATIVA
 - CANCELADA
 - EXPIRADA
-- SUSPENSA (planejado)
+- SUSPENSA
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -109,8 +111,10 @@ Enum StatusAssinatura:
 Enum StatusPagamento:
 
 - APROVADO
+- SUSPENSA
+- PENDENTE
+- BLOQUEADO
 - RECUSADO
-- PENDENTE (planejado)
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -176,16 +180,90 @@ Enum StatusPagamento:
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-📌 Próximas Evoluções Planejadas
+👤 Usuários
+Método	          Endpoint	                  Descrição
 
-- Implementação completa da entidade Pagamento
-- Simulação de cobrança automática
-- Bloqueio por inadimplência
-- Implementação de Status SUSPENSA
-- Melhoria de consultas específicas
-- Implementação de testes unitários
+GET	              /usuarios	                  Listar todos os usuários
+GET	              /usuarios/{id}	            Buscar usuário por ID
+
+POST	            /usuarios	                  Criar novo usuário
+
+PUT	              /usuarios/{id}	            Atualizar usuário
+
+DELETE	          /usuarios/{id}	            Deletar usuário
+
+Exemplo de criação:
+
+{
+  "nome": "João",
+  "email": "joao@email.com"
+}
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+📦 Planos
+Método	                  Endpoint	                          Descrição
+
+GET	                      /planos                             Listar todos os planos
+GET	                      /planos/{id}	                      Buscar plano por ID
+
+POST	                    /planos	                            Criar plano
+
+PUT	                      /planos/{id}	                      Atualizar plano
+
+PATCH	                    /planos/{id}/activate	              Ativar plano
+PATCH                     /planos/{id}/deactivate             Desativar plano
+
+Exemplo:
+
+{
+  "nome": "Plano Premium",
+  "preco": 49.90
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+📑 Assinaturas
+Método	                                 Endpoint	                                                      Descrição
+
+GET	                                     /assinaturas                                                   Listar todas as assinaturas
+GET	                                     /assinaturas/{assinaturaId}                                    Buscar assinatura por ID
+GET	                                     /assinaturas/usuario/{usuarioId}                               Buscar assinaturas de um usuário
+GET	                                     /assinaturas/usuario/{usuarioId}/active	                      Buscar assinatura ativa do usuário
+
+POST	                                   /assinaturas/usuario/{usuarioId}/plano/{planoId}	              Criar assinatura
+POST                                     /assinaturas/{assinaturaId}/change-plan/{novoPlanoId}          Trocar plano da assinatura
+
+PATCH                                    /assinaturas/{assinaturaId}/renew                              Renovar assinatura
+PATCH                                    /assinaturas/{assinaturaId}/cancel                             Cancelar assinatura
+PATCH                                    /assinaturas/{id}/reactivate                                   Reativar assinatura
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+💳 Pagamentos
+Método	              Endpoint	                                                      Descrição
+
+GET	                  /pagamento/id/{id}	                                            Buscar pagamento por ID
+GET	                  /pagamento/assinaturas/{assinaturaId}	                          Listar pagamentos de uma assinatura
+
+POST	                /pagamento/assinaturas/{assinaturaId}/pagamentos	              Realizar pagamento
+
+Parâmetro obrigatório: metodoPagamento
+
+Exemplo de requisição:
+
+POST /pagamento/assinaturas/1/pagamentos?metodoPagamento=CARTAO
+
+Body:
+
+{
+  "valor": 49.90
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 🎯 Objetivo do Projeto
 
